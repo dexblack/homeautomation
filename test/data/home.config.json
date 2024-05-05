@@ -1,0 +1,526 @@
+{
+    "microcontroller": "ESP32-S3",
+    "control types": {
+        "null": "",
+        "button": "B",
+        "toggle": "T",
+        "rotary": "S",
+        "light": "L",
+        "relay": "R"
+    },
+    "controls": [
+        {
+            "group": "door",
+            "row": 7,
+            "rows": [
+                [
+                    {
+                        "type": "button",
+                        "name": "Gas Release 1"
+                    },
+                    {
+                        "type": "button",
+                        "name": "Gas Release 2"
+                    },
+                    {
+                        "type": "button",
+                        "name": "Gas Release 3"
+                    },
+                    {
+                        "type": "button",
+                        "name": "Break Glass"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Door Open Indicator"
+                    }
+                ]
+            ]
+        },
+        {
+            "group": "Status Indicator Panel",
+            "row": 1,
+            "rows": [
+                [
+                    {
+                        "type": "light",
+                        "name": "Main Power On"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 2"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 3"
+                    },
+                    {
+                        "type": "null",
+                        "name": "NO Light Here"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 4"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 5"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 6"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Light 7"
+                    }
+                ],
+                [
+                    {
+                        "type": "toggle",
+                        "name": "Switch 1"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 2"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 3"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 4"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 5"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 6"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 7"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Switch 8"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Bypass Enable"
+                    },
+                    {
+                        "type": "light",
+                        "name": "Power Supply Fault"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Battery Bypass"
+                    },
+                    {
+                        "type": "toggle",
+                        "name": "Main Power"
+                    }
+                ]
+            ]
+        },
+        {
+            "group": "Patio Controls",
+            "row": 3,
+            "rows": [
+                [
+                    {
+                        "type": "rotary",
+                        "name": "Main Section LED"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 1"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 2"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 3"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 4"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 5"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 6"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 7"
+                    }
+                ],
+                [
+                    {
+                        "type": "rotary",
+                        "name": "Dial 8"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 9"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 10"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 11"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 12"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 13"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 14"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 15"
+                    }
+                ],
+                [
+                    {
+                        "type": "rotary",
+                        "name": "Dial 16"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 17"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 18"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 19"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 20"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 21"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 22"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 23"
+                    }
+                ],
+                [
+                    {
+                        "type": "rotary",
+                        "name": "Dial 24"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 25"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 26"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 27"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 28"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 29"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 30"
+                    },
+                    {
+                        "type": "rotary",
+                        "name": "Dial 31"
+                    }
+                ]
+            ]
+        },
+        {
+            "group": "Patio Controls",
+            "row": 8,
+            "rows": [
+                [
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 1"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 2"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 3"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 4"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 5"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LED Strip 6"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "RGB Strip 1"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "RGB Strip 2"
+                    }
+                ],
+                [
+                    {
+                        "type": "relay",
+                        "name": "RGB Strip 3"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "RGB Strip 4"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LASER 1"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "LASER 2"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "Flood 1"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "Flood 2"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "Flood 3"
+                    },
+                    {
+                        "type": "relay",
+                        "name": "Flood 4"
+                    }
+                ]
+            ]
+        }
+    ],
+    "I2C Config": {
+        "devices": [
+            {
+                "address": 32,
+                "name": "Indicator Lights",
+                "type": "pcf8575",
+                "config": {
+                    "pins": [
+                        "L1_1",
+                        "L1_2",
+                        "L1_3",
+                        "L1_5",
+                        "L1_6",
+                        "L1_7",
+                        "L1_8",
+                        "L1_9",
+                        "L1_10",
+                        "L1_11",
+                        "L1_12",
+                        "L2_9",
+                        "L2_10",
+                        "",
+                        "",
+                        ""
+                    ]
+                }
+            },
+            {
+                "address": 33,
+                "name": "Rotary Row 1",
+                "type": "pcf8575",
+                "config": {
+                    "pins": [
+                        {
+                            "S1_1": 1
+                        },
+                        {
+                            "S1_1": 2
+                        },
+                        {
+                            "S1_2": 1
+                        },
+                        {
+                            "S1_2": 2
+                        },
+                        {
+                            "S1_3": 1
+                        },
+                        {
+                            "S1_3": 2
+                        },
+                        {
+                            "S1_4": 1
+                        },
+                        {
+                            "S1_4": 2
+                        },
+                        {
+                            "S1_5": 1
+                        },
+                        {
+                            "S1_5": 2
+                        },
+                        {
+                            "S1_6": 1
+                        },
+                        {
+                            "S2_6": 2
+                        },
+                        {
+                            "S2_7": 1
+                        },
+                        {
+                            "S2_7": 2
+                        },
+                        {
+                            "S2_8": 1
+                        },
+                        {
+                            "S2_8": 2
+                        }
+                    ]
+                }
+            },
+            {
+                "address": 108,
+                "name": "Indicator Buttons",
+                "type": "mcp23017",
+                "config": {
+                    "reset": 23,
+                    "A": {
+                        "irq": 21,
+                        "pins": [
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        ]
+                    },
+                    "B": {
+                        "irq": 22,
+                        "pins": [
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        ]
+                    }
+                }
+            }
+        ]
+    },
+    "actions": [
+        {
+            "Battery Bypass Toggle switch used": [
+                {
+                    "Battery Bypass": {
+                        "value": 1,
+                        "Battery Enable": 1
+                    }
+                },
+                {
+                    "Battery Bypass": {
+                        "value": 0,
+                        "Battery Enable": 0
+                    }
+                }
+            ]
+        },
+        {
+            "Main Section LED strip": [
+                {
+                    "Main Section LED": {
+                        "value": 0,
+                        "LED Strip 1": 0
+                    }
+                },
+                {
+                    "Main Section LED": {
+                        "value": 0,
+                        "LED Strip 2": 0
+                    }
+                },
+                {
+                    "Main Section LED": {
+                        "value": 1,
+                        "LED Strip 1": 1
+                    }
+                },
+                {
+                    "Main Section LED": {
+                        "value": 1,
+                        "LED Strip 2": 0
+                    }
+                },
+                {
+                    "Main Section LED": {
+                        "value": 2,
+                        "LED Strip 1": 1
+                    }
+                },
+                {
+                    "Main Section LED": {
+                        "value": 2,
+                        "LED Strip 2": 1
+                    }
+                }
+            ]
+        }
+    ],
+    "NeoPixels": {}
+}
