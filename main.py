@@ -6,7 +6,10 @@ import configure
 def main():
     # Calculate the path to home.config.json based on the location of this script
     script_dir = os.path.dirname(os.path.realpath(__file__))
+    schema_file_path = os.path.join(script_dir, 'test', 'data', 'config.schema.json')
     config_file_path = os.path.join(script_dir, 'test', 'data', 'home.config.json')
+
+    assert(configure.validate_json(config_file_path, schema_file_path))
 
     # Load configuration from the calculated path
     config = configure.load(config_file_path)

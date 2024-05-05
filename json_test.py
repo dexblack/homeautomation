@@ -5,10 +5,19 @@ import configure
 
 class TestConfigureFunctions(unittest.TestCase):
 
+    def setUp(self):
+        # Some constants
+        self.test_json = 'test/data/home.config.json'
+
     def test_load(self):
         # Test loading configuration from a file
-        config = configure.load('test.config.json')
+        config = configure.load(self.test_json)
         self.assertIsInstance(config, dict)
+
+    def test_validatejson_schema(self):
+        # Verify the test cfg against 
+        valid = configure.validate_json(self.test_json, 'test/data/config.schema.json')
+        self.assertTrue(valid)
 
     def test_report(self):
         # Test reporting configuration

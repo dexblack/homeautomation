@@ -270,7 +270,7 @@
             ]
         },
         {
-            "group": "Patio Controls",
+            "group": "Patio Relays",
             "row": 8,
             "rows": [
                 [
@@ -377,6 +377,7 @@
                 "type": "pcf8575",
                 "config": {
                     "pins": [
+                        254,
                         {
                             "S1_1": 1
                         },

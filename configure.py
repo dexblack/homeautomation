@@ -1,4 +1,5 @@
 import json
+import jsonschema
 
 def load(file_path):
     """
@@ -8,12 +9,39 @@ def load(file_path):
         config = json.load(f)
     return config
 
-def validate(config, parent_keys=None):
+def validate_json(json_file, schema_file):
+    """
+    Validate a JSON file against a JSON schema.
+
+    Args:
+        json_file (str): Path to the JSON file to validate.
+        schema_file (str): Path to the JSON schema file.
+
+    Returns:
+        bool: True if the JSON file is valid according to the schema, False otherwise.
+    """
+    # Load JSON data from file
+    with open(json_file, 'r') as f:
+        json_data = json.load(f)
+
+    # Load JSON schema from file
+    with open(schema_file, 'r') as f:
+        schema = json.load(f)
+
+    # Validate JSON data against schema
+    try:
+        jsonschema.validate(json_data, schema)
+        print("Validation successful: JSON file is valid according to the schema.")
+        return True
+    except jsonschema.exceptions.ValidationError as e:
+        print("Validation failed:", e)
+        return False
+
+def validate(config):
     """
     Validate the configuration format.
     """
-    if parent_keys is None:
-        parent_keys = []
+    parent_keys = []
 
     # Validation rules implementation
     unique_names = set()
