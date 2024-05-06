@@ -91,46 +91,36 @@
               "config": {
                 "type": "object",
                 "properties": {
-                  "pins": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
                   "reset": {
                     "type": "integer"
                   },
-                  "A": {
-                    "type": "object",
-                    "properties": {
-                      "irq": {
+                  "irq": {
+                    "patternProperties": {
+                      "^[A-Z]$": {
                         "type": "integer"
-                      },
-                      "pins": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        }
                       }
-                    },
-                    "additionalProperties": false
+                    }
                   },
-                  "B": {
-                    "type": "object",
-                    "properties": {
-                      "irq": {
-                        "type": "integer"
-                      },
-                      "pins": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
+                  "pins": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "cid": {
+                          "type": "string",
+                          "pattern": "^[a-zA-Z]+[0-9]+_[0-9]+$"
+                        },
+                        "pole": {
+                          "type": "integer"
                         }
-                      }
-                    },
-                    "additionalProperties": false
+                      },
+                      "required": [
+                        "cid"
+                      ]
+                    }
                   }
-                }
+                },
+                "additionalProperties": false
               }
             },
             "required": [
@@ -206,142 +196,5 @@
       ]
     }
   },
-  "allOf": [
-    {
-      "if": {
-        "properties": {
-          "I2C Config": {
-            "properties": {
-              "devices": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "const": "pcf8575"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "I2C Config": {
-            "properties": {
-              "devices": {
-                "items": {
-                  "properties": {
-                    "config": {
-                      "properties": {
-                        "pins": {
-                          "type": "array",
-                          "items": {
-                            "anyOf": [
-                              {
-                                "type": "string",
-                                "pattern": "^[a-zA-Z]+[0-9+]_[0-9+]$"
-                              },
-                              {
-                                "type": "object",
-                                "patternProperties": {
-                                  "^[a-zA-Z]+[0-9+]_[0-9+]$": {
-                                    "type": "integer"
-                                  }
-                                },
-                                "additionalProperties": false
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "pins"
-                      ],
-                      "additionalProperties": false
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "if": {
-        "properties": {
-          "I2C Config": {
-            "properties": {
-              "devices": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "const": "mcp23017"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "then": {
-        "properties": {
-          "I2C Config": {
-            "properties": {
-              "devices": {
-                "items": {
-                  "properties": {
-                    "config": {
-                      "properties": {
-                        "reset": {
-                          "type": "integer"
-                        },
-                        "A": {
-                          "type": "object",
-                          "properties": {
-                            "irq": {
-                              "type": "integer"
-                            },
-                            "pins": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "additionalProperties": false
-                        },
-                        "B": {
-                          "type": "object",
-                          "properties": {
-                            "irq": {
-                              "type": "integer"
-                            },
-                            "pins": {
-                              "type": "array",
-                              "items": {
-                                "type": "string"
-                              }
-                            }
-                          },
-                          "additionalProperties": false
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  ],
   "additionalProperties": false
 }
