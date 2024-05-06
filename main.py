@@ -2,6 +2,7 @@
 
 import os
 import configure
+import logging
 
 def main():
     # Calculate the path to home.config.json based on the location of this script
@@ -17,12 +18,14 @@ def main():
      # Validate the loaded configuration
     try:
         configure.validate(config)
-        print("Configuration is valid.")
+        logging.info("Configuration is valid.")
     except ValueError as e:
-        print(f"Configuration validation failed: {e}")
+        logging.debug(f"Configuration validation failed: {e}")
+
+    actions = configure.build(config)
 
     # Report the loaded configuration
-    configure.report(config)
+    configure.report(actions)
 
 if __name__ == "__main__":
     main()
