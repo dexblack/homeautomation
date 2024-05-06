@@ -1,5 +1,6 @@
 import json
 import jsonschema
+import logging
 
 def load(file_path):
     """
@@ -80,7 +81,7 @@ def validate(config):
                             raise ValueError(f"Missing 'row' field at {'.'.join(parent_keys)}")
                         
                         control_name = f"{prefix}{group_start_row + row_index}_{column_index}"
-                        print(f"Control: {control_name} at {'.'.join(parent_keys)}")
+                        logging.trace(f"Control: {control_name} at {'.'.join(parent_keys)}")
 
                         if control_name in control_names:
                             raise ValueError(f"Duplicate control name found: {control_name} at {'.'.join(parent_keys)}")
@@ -91,7 +92,6 @@ def validate(config):
         parent_keys.pop()  # Remove "controls[index]" from parent keys
     
     # Additional schema validation can be implemented here
-    
     return True  # Configuration is valid
 
 def report(config):
@@ -100,14 +100,69 @@ def report(config):
     """
     for key, value in config.items():
         if key not in ["microcontroller", "control types", "NeoPixels", "IC2 Config"]:  # Exclude for brevity
-            print(f"{key}: {value}")
+            logging.info(f"{key}: {value}")
 
-def build(config):
-    """
-    Build something based on the configuration.
-    """
-    # Placeholder for build process
-    pass
+def build(data):
+    new_script = []
+    control_by_name = {}
+    control_pins_by_cid = {}
+
+    # Organize controls by cid
+    for control_group in data["controls"]:
+        row_start = control_group["row"] - 1  # Adjust for 0-based indexing
+        for row_index, row in enumerate(control_group["rows"], start=row_start):
+            for column_index, input_control in enumerate(row, start=1):
+                control_type_prefix = data["control types"][input_control["type"]]
+                cid = f"{control_type_prefix}{row_index + 1}_{column_index}"
+                control_by_name[input_control["name"]] = {
+                    "cid": cid, "type": input_control["type"]
+                }
+
+    for device in data["I2C Config"]["devices"]:
+        for pin_index, pin in enumerate(device["config"]["pins"], start=0):
+            if pin["cid"] in control_pins_by_cid:
+                control_pins_by_cid[pin["cid"]]["pins"].append(pin_index)
+            else:
+                control_pins_by_cid[pin["cid"]] = {
+                    "address": device["address"],
+                    "pins": [ pin_index ]
+                }
+
+
+    # return {
+    #     "control_cid_by_name": control_cid_by_name,
+    #     "control_pins_by_cid": control_pins_by_cid
+    #     }
+
+    # Iterate through actions
+    for action in data["actions"]:
+        action_steps_transformed = []
+        for description in action.keys():
+            for io_event in action[description]:
+                for control_name in io_event.keys():
+                    input_control = control_by_name[control_name]
+                    if input_control["cid"] in control_pins_by_cid:
+                        input_cfg = control_pins_by_cid[input_control["cid"]]
+                        output_control_name = next(k for k in io_event[control_name].keys() if k != "value")
+                        output_control = control_by_name[output_control_name]
+                        output_cfg = control_pins_by_cid[output_control["cid"]]
+
+                        action_step_transformed = {
+                            "in_address": input_cfg["address"],
+                            "in_pins": input_cfg["pins"],
+                            "in_value": io_event[control_name]["value"],
+                            "out_address": output_cfg["address"],
+                            "out_pins": output_cfg["pins"],
+                            "out_value": io_event[control_name][output_control_name]
+                        }
+                        action_steps_transformed.append(action_step_transformed)
+                    else:
+                        logging.debug(f"{input_control["cid"]} not configured on any controller.")
+                        continue
+
+        new_script.append({"action": action_steps_transformed})
+
+    return {"script": new_script}
 
 def generate(config):
     """
