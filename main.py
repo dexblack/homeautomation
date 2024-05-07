@@ -26,7 +26,7 @@ def main():
     logging.info(configure.build(config, True))
     actions = configure.build(config)
     schema_file_path = os.path.join(script_dir, 'test', 'data', 'script.schema.json')
-    assert(configure.validate_json(actions, schema_file_path))
+    assert(configure.validate_schema(actions, schema_file_path))
 
     # Report the loaded configuration
 

@@ -1,3 +1,5 @@
+import pprint
+
 DEBUG_LEVEL = 2  # Adjust this constant to set the debug level
 
 def dbgprint(*args, level=1):
@@ -9,7 +11,8 @@ def dbgprint(*args, level=1):
         level (int): Debug level of the message. Messages with levels less than or equal to DEBUG_LEVEL will be printed.
     """
     if level <= DEBUG_LEVEL:
-        print(*args)
+        for arg in args:
+            pprint.pprint(arg)
 
 def info(*args):
     """Prints an informational message."""

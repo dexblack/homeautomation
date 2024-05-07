@@ -1,5 +1,6 @@
 import json
 import jsonschema
+import pprint
 import logging
 
 def load(file_path):
@@ -104,7 +105,7 @@ def report(config):
     """
     for key, value in config.items():
         if key not in ["microcontroller", "control types", "NeoPixels", "IC2 Config"]:  # Exclude for brevity
-            logging.info(f"{key}: {value}")
+            logging.info(f"{key}: ", value)
 
 def build(data, human_readable=False):
     new_script = []
