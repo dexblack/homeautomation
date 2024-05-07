@@ -1,48 +1,81 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "type": "object",
-    "properties": {
-      "devices": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "address": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "type": {
-              "type": "string",
-              "enum": ["pcf8574", "pcf8575", "mcp23017"]
-            },
-            "config": {
-              "type": "object",
-              "properties": {
-                "reset": {
-                  "type": "integer"
-                },
-                "irq": {
-                  "type": "object",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "pcf8574",
+              "pcf8575",
+              "mcp23017"
+            ]
+          },
+          "config": {
+            "type": "object",
+            "oneOf": [
+              {
+                "if": {
                   "properties": {
-                    "A": {
-                      "type": "integer"
-                    },
-                    "B": {
-                      "type": "integer"
+                    "type": {
+                      "const": "mcp23017"
                     }
                   }
                 },
-                "pins": {
-                  "type": "array",
-                  "items": {
-                    "oneOf": [
-                      {
-                        "type": "string",
-                        "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
-                      },
-                      {
+                "then": {
+                  "type": "object",
+                  "properties": {
+                    "reset": {
+                      "type": "integer"
+                    },
+                    "patternProperties": {
+                      "^[A-Z]+$": {
+                        "type": "object",
+                        "properties": {
+                          "irq": {
+                            "type": "integer"
+                          },
+                          "pins": {
+                            "type": "string",
+                            "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
+                          }
+                        },
+                        "required": [
+                          "irq",
+                          "pins"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "reset"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "pcf8575"
+                    }
+                  }
+                },
+                "then": {
+                  "type": "object",
+                  "properties": {
+                    "pins": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
                           "cid": {
@@ -53,33 +86,55 @@
                             "type": "integer"
                           }
                         },
-                        "required": ["cid", "pole"]
-                      },
-                      {
-                        "type": "object",
-                        "properties": {
-                          "cid": {
-                            "type": "string",
-                            "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
-                          },
-                          "irq": {
-                            "type": "string",
-                            "enum": ["A", "B"]
-                          }
-                        },
-                        "required": ["cid", "irq"]
+                        "required": [
+                          "cid",
+                          "pole"
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  },
+                  "required": [
+                    "pins"
+                  ]
                 }
               },
-              "required": ["pins"]
-            }
-          },
-          "required": ["address", "name", "type", "config"]
-        }
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "pcf8574"
+                    }
+                  }
+                },
+                "then": {
+                  "type": "object",
+                  "properties": {
+                    "pins": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "pins"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "required": [
+          "address",
+          "name",
+          "type",
+          "config"
+        ]
       }
-    },
-    "required": ["devices"]
-  }
-  
+    }
+  },
+  "required": [
+    "devices"
+  ]
+}
