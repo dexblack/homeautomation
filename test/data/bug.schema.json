@@ -1,0 +1,85 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "devices": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["pcf8574", "pcf8575", "mcp23017"]
+            },
+            "config": {
+              "type": "object",
+              "properties": {
+                "reset": {
+                  "type": "integer"
+                },
+                "irq": {
+                  "type": "object",
+                  "properties": {
+                    "A": {
+                      "type": "integer"
+                    },
+                    "B": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "pins": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "cid": {
+                            "type": "string",
+                            "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
+                          },
+                          "pole": {
+                            "type": "integer"
+                          }
+                        },
+                        "required": ["cid", "pole"]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "cid": {
+                            "type": "string",
+                            "pattern": "^[A-Z]+[0-9]+_[0-9]+$"
+                          },
+                          "irq": {
+                            "type": "string",
+                            "enum": ["A", "B"]
+                          }
+                        },
+                        "required": ["cid", "irq"]
+                      }
+                    ]
+                  }
+                }
+              },
+              "required": ["pins"]
+            }
+          },
+          "required": ["address", "name", "type", "config"]
+        }
+      }
+    },
+    "required": ["devices"]
+  }
+  

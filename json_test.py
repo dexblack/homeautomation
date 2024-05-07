@@ -39,6 +39,8 @@ class TestConfigureFunctions(unittest.TestCase):
         self.assertIsInstance(script[1]["reactions"], list)
         self.assertIsInstance(script[1]["reactions"][5], object)
 
+    def test_jsonschema_bug(self):
+        self.assertTrue(configure.validate_json('test/data/jsonschema.bug.json', 'test/data/bug.schema.json'))
 
 if __name__ == '__main__':
     unittest.main()
