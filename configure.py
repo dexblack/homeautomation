@@ -1,6 +1,5 @@
 import json
 import jsonschema
-import pprint
 import logging
 
 def load(file_path):
@@ -19,11 +18,11 @@ def validate_schema(data, schema_file):
             schema = json.load(f)
             jsonschema.validate(data, schema)
 
-        print("Validation successful: JSON file is valid according to the schema.")
+        logging.info("Validation successful: JSON file is valid according to the schema.")
         return True
     
     except jsonschema.exceptions.ValidationError as e:
-        print("Validation failed:", e)
+        logging.error("Validation failed:", e)
         return False
 
 def validate_json(json_file, schema_file):

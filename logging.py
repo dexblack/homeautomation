@@ -12,16 +12,27 @@ def dbgprint(*args, level=1):
     """
     if level <= DEBUG_LEVEL:
         for arg in args:
-            pprint.pprint(arg)
+            if isinstance(arg, str):
+                print(arg)
+            else:
+                pprint.pprint(arg, width=70)
 
 def info(*args):
     """Prints an informational message."""
     dbgprint("[INFO]", *args, level=1)
 
+def error(*args):
+    """Prints an error message"""
+    dbgprint("[ERROR]", *args, level=2)
+
+def warning(*args):
+    """Prints an error message"""
+    dbgprint("[WARNING]", *args, level=3)
+
 def debug(*args):
     """Prints a debug message."""
-    dbgprint("[DEBUG]", *args, level=2)
+    dbgprint("[DEBUG]", *args, level=4)
 
 def trace(*args):
     """Prints a trace message."""
-    dbgprint("[TRACE]", *args, level=3)
+    dbgprint("[TRACE]", *args, level=5)
