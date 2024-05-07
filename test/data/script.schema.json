@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "PinIndex": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "PinValue": {
+            "type": "integer"
+        }
+    },
+    "script": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "reactions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "in_address": {
+                                "$ref": "#/definitions/PinIndex"
+                            },
+                            "in_pins": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/PinIndex"
+                                }
+                            },
+                            "in_value": {
+                                "$ref": "#/definitions/PinValue"
+                            },
+                            "out_address": {
+                                "$ref": "#/definitions/PinIndex"
+                            },
+                            "out_pins": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/PinIndex"
+                                }
+                            },
+                            "out_value": {
+                                "$ref": "#/definitions/PinValue"
+                            }
+                        },
+                        "required": [
+                            "in_address",
+                            "in_pins",
+                            "in_value",
+                            "out_address",
+                            "out_pins",
+                            "out_value"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "reactions"
+            ]
+        }
+    }
+}

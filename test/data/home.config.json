@@ -10,6 +10,18 @@
     },
     "controls": [
         {
+            "group": "relays",
+            "row": 11,
+            "rows": [
+                [
+                    {
+                        "type": "relay",
+                        "name": "Battery Enable"
+                    }
+                ]
+            ]
+        },
+        {
             "group": "door",
             "row": 7,
             "rows": [
@@ -396,6 +408,54 @@
             },
             {
                 "address": 33,
+                "name": "Mixed controls",
+                "type": "pcf8575",
+                "config": {
+                    "pins": [
+                        {
+                            "cid": "S3_1"
+                        },
+                        {
+                            "cid": "S3_1"
+                        },
+                        {
+                            "cid": "T2_10"
+                        },
+                        {
+                            "cid": "T2_11"
+                        },
+                        {
+                            "cid": "R11_1"
+                        },
+                        {
+                            "cid": "R8_1"
+                        },
+                        {
+                            "cid": "R8_2"
+                        },
+                        {
+                            "cid": "R8_3"
+                        },
+                        {
+                            "cid": "L1_7"
+                        },
+                        {
+                            "cid": "L1_8"
+                        },
+                        {
+                            "cid": "L1_9"
+                        },
+                        {
+                            "cid": "L1_10"
+                        },
+                        {
+                            "cid": "L1_11"
+                        }
+                    ]
+                }
+            },
+            {
+                "address": 34,
                 "name": "Rotary Row 1",
                 "type": "pcf8575",
                 "config": {
