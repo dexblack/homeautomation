@@ -14,6 +14,7 @@ def main():
 
     # Load configuration from the calculated path
     config = configure.load(config_file_path)
+    configure.report(config)
     
      # Validate the loaded configuration
     try:
@@ -22,10 +23,12 @@ def main():
     except ValueError as e:
         logging.debug(f"Configuration validation failed: {e}")
 
+    logging.info(configure.build(config, True))
     actions = configure.build(config)
+    schema_file_path = os.path.join(script_dir, 'test', 'data', 'script.schema.json')
+    assert(configure.validate_json(actions, schema_file_path))
 
     # Report the loaded configuration
-    configure.report(actions)
 
 if __name__ == "__main__":
     main()
