@@ -123,13 +123,13 @@ def build(data, human_readable=False):
                 }
 
     for device in data["I2C Config"]["devices"]:
-        for pin_index, pin in enumerate(device["config"]["pins"], start=0):
+        for pin in device["config"]["pins"]:
             if pin["cid"] in control_pins_by_cid:
-                control_pins_by_cid[pin["cid"]]["pins"].append(pin_index)
+                control_pins_by_cid[pin["cid"]]["pins"].append(pin["pin"])
             else:
                 control_pins_by_cid[pin["cid"]] = {
                     "address": device["address"],
-                    "pins": [ pin_index ]
+                    "pins": [ pin["pin"] ]
                 }
 
     def valid_pins_value(pins, value):
