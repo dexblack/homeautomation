@@ -1,7 +1,8 @@
 # main.py
 
 import os
-import configure
+from configure import Configure
+from build import Build
 import logging
 
 def main():
@@ -9,22 +10,21 @@ def main():
     script_dir = os.path.dirname(os.path.realpath(__file__))
     schema_file_path = os.path.join(script_dir, 'test', 'data', 'config.schema.json')
     config_file_path = os.path.join(script_dir, 'test', 'data', 'home.config.json')
-
-    assert(configure.validate_json(config_file_path, schema_file_path))
-
-    # Load configuration from the calculated path
-    config = configure.load(config_file_path)
-    configure.report(config)
     
      # Validate the loaded configuration
     try:
-        configure.validate(config)
+        configure = Configure(config_file_path)
+        assert(configure.schema_is_valid(schema_file_path))
+
+        # Load configuration from the calculated path
+        configure.report()
         logging.info("Configuration is valid.")
     except ValueError as e:
         logging.debug(f"Configuration validation failed: {e}")
 
-    logging.info(configure.build(config, True))
-    actions = configure.build(config)
+    configuration = configure()
+    logging.info()
+    actions = Build(configuration).build()
     schema_file_path = os.path.join(script_dir, 'test', 'data', 'script.schema.json')
     assert(configure.validate_schema(actions, schema_file_path))
 
