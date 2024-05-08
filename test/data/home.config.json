@@ -365,42 +365,55 @@
                 "config": {
                     "pins": [
                         {
+                            "pin": 1,
                             "cid": "L1_1"
                         },
                         {
+                            "pin": 2,
                             "cid": "L1_2"
                         },
                         {
+                            "pin": 3,
                             "cid": "L1_3"
                         },
                         {
+                            "pin": 5,
                             "cid": "L1_5"
                         },
                         {
+                            "pin": 6,
                             "cid": "L1_6"
                         },
                         {
+                            "pin": 7,
                             "cid": "L1_7"
                         },
                         {
+                            "pin": 8,
                             "cid": "L1_8"
                         },
                         {
+                            "pin": 9,
                             "cid": "L1_9"
                         },
                         {
+                            "pin": 10,
                             "cid": "L1_10"
                         },
                         {
+                            "pin": 11,
                             "cid": "L1_11"
                         },
                         {
+                            "pin": 12,
                             "cid": "L1_12"
                         },
                         {
+                            "pin": 14,
                             "cid": "L2_9"
                         },
                         {
+                            "pin": 15,
                             "cid": "L2_10"
                         }
                     ]
@@ -413,42 +426,55 @@
                 "config": {
                     "pins": [
                         {
+                            "pin": 0,
                             "cid": "S3_1"
                         },
                         {
+                            "pin": 1,
                             "cid": "S3_1"
                         },
                         {
+                            "pin": 10,
                             "cid": "T2_10"
                         },
                         {
+                            "pin": 12,
                             "cid": "T2_11"
                         },
                         {
+                            "pin": 5,
                             "cid": "R11_1"
                         },
                         {
+                            "pin": 2,
                             "cid": "R8_1"
                         },
                         {
+                            "pin": 3,
                             "cid": "R8_2"
                         },
                         {
+                            "pin": 4,
                             "cid": "R8_3"
                         },
                         {
+                            "pin": 7,
                             "cid": "L1_7"
                         },
                         {
+                            "pin": 8,
                             "cid": "L1_8"
                         },
                         {
+                            "pin": 9,
                             "cid": "L1_9"
                         },
                         {
+                            "pin": 10,
                             "cid": "L1_10"
                         },
                         {
+                            "pin": 11,
                             "cid": "L1_11"
                         }
                     ]
@@ -461,66 +487,82 @@
                 "config": {
                     "pins": [
                         {
+                            "pin": 0,
                             "cid": "S1_1",
                             "pole": 1
                         },
                         {
+                            "pin": 1,
                             "cid": "S1_1",
                             "pole": 2
                         },
                         {
+                            "pin": 2,
                             "cid": "S1_2",
                             "pole": 1
                         },
                         {
+                            "pin": 3,
                             "cid": "S1_2",
                             "pole": 2
                         },
                         {
+                            "pin": 4,
                             "cid": "S1_3",
                             "pole": 1
                         },
                         {
+                            "pin": 5,
                             "cid": "S1_3",
                             "pole": 2
                         },
                         {
+                            "pin": 6,
                             "cid": "S1_4",
                             "pole": 1
                         },
                         {
+                            "pin": 7,
                             "cid": "S1_4",
                             "pole": 2
                         },
                         {
+                            "pin": 8,
                             "cid": "S1_5",
                             "pole": 1
                         },
                         {
+                            "pin": 9,
                             "cid": "S1_5",
                             "pole": 2
                         },
                         {
+                            "pin": 10,
                             "cid": "S1_6",
                             "pole": 1
                         },
                         {
+                            "pin": 11,
                             "cid": "S2_6",
                             "pole": 2
                         },
                         {
+                            "pin": 12,
                             "cid": "S2_7",
                             "pole": 1
                         },
                         {
+                            "pin": 13,
                             "cid": "S2_7",
                             "pole": 2
                         },
                         {
+                            "pin": 14,
                             "cid": "S2_8",
                             "pole": 1
                         },
                         {
+                            "pin": 15,
                             "cid": "S2_8",
                             "pole": 2
                         }
@@ -540,35 +582,43 @@
                     "pins": [
                         {
                             "cid": "L1_1",
-                            "irq": "A"
+                            "irq": "A",
+                            "pin": 0
                         },
                         {
                             "cid": "L1_2",
-                            "irq": "A"
+                            "irq": "A",
+                            "pin": 1
                         },
                         {
                             "cid": "L1_3",
-                            "irq": "A"
+                            "irq": "A",
+                            "pin": 3
                         },
                         {
                             "cid": "L1_10",
-                            "irq": "A"
+                            "irq": "A",
+                            "pin": 5
                         },
                         {
                             "cid": "L1_11",
-                            "irq": "B"
+                            "irq": "B",
+                            "pin": 0
                         },
                         {
                             "cid": "L1_12",
-                            "irq": "B"
+                            "irq": "B",
+                            "pin": 2
                         },
                         {
                             "cid": "L2_10",
-                            "irq": "B"
+                            "irq": "B",
+                            "pin": 4
                         },
                         {
                             "cid": "L2_9",
-                            "irq": "B"
+                            "irq": "B",
+                            "pin": 6
                         }
                     ]
                 }
