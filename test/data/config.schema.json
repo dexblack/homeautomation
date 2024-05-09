@@ -82,6 +82,10 @@
               "address": {
                 "type": "integer"
               },
+              "maxpins": {
+                "type": "integer",
+                "maximum": 16
+              },
               "name": {
                 "type": "string"
               },

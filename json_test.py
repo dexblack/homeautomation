@@ -1,5 +1,6 @@
 # test.py
 
+from plistlib import InvalidFileException
 import unittest
 import configure
 
@@ -8,7 +9,10 @@ class TestConfigureFunctions(unittest.TestCase):
 
     def setUp(self):
         # Some constants
+        self.test_schema = "test/data/script.schema.json"
         self.test_json = "test/data/home.config.json"
+        self.test_json_max_pins = "test/data/home.config.max-pins.json"
+        self.test_json_duped_pins = "test/data/home.config.duped-pins.json"
 
     def test_load(self):
         # Test loading configuration from a file
@@ -18,14 +22,14 @@ class TestConfigureFunctions(unittest.TestCase):
     def test_validatejson_schema(self):
         # Verify the test configuration against the config schema
         self.assertTrue(
-            configure.validate_json(self.test_json, "test/data/config.schema.json")
+            configure.validate_json(self.test_json, self.test_schema)
         )
 
     def test_validscript_schema(self):
         # Verify the build output
         config = configure.load(self.test_json)
         data = configure.build(config)
-        valid_schema = configure.validate_schema(data, "test/data/script.schema.json")
+        valid_schema = configure.validate_schema(data, self.test_schema)
         self.assertTrue(valid_schema)
 
     def test_validscript_response(self):
@@ -56,6 +60,18 @@ class TestConfigureFunctions(unittest.TestCase):
             script[1]["reactions"][5]["respond"],
             "if Main Section LED==2 then set LED Strip 2 = 1",
         )
+
+    def test_invalid_max_pins(self):
+        # Verify the build output
+        config = configure.load(self.test_json_max_pins)
+        with self.assertRaises(InvalidFileException, msg="Expected InvalidFileException."):
+            configure.validate(config)
+
+    def test_invalid_duped_pins(self):
+        # Verify the build output
+        config = configure.load(self.test_json_duped_pins)
+        with self.assertRaises(InvalidFileException, msg="Expected InvalidFileException."):
+            configure.validate(config)
 
 
 if __name__ == "__main__":

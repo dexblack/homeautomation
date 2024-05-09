@@ -1,4 +1,5 @@
 import json
+from plistlib import InvalidFileException
 import jsonschema
 import logging
 
@@ -46,6 +47,14 @@ def validate(config):
     """
     Validate the configuration format.
     """
+    return validate_controls(config) and validate_devices(config)
+
+def validate_controls(config):
+    """Verifies the "controls" within the configuration object.
+
+    Returns:
+        boolean: True if valid, False otherwise.
+    """
     parent_keys = []
 
     # Validation rules implementation
@@ -55,8 +64,8 @@ def validate(config):
     controls = config.get("controls", [])
     
     # Validate control names uniqueness and generate control names list
-    for control_group_index, control_group in enumerate(controls, start=1):
-        parent_keys.append(f"controls[{control_group_index - 1}]")
+    for control_group_index, control_group in enumerate(controls):
+        parent_keys.append(f"controls[{control_group_index}]")
 
         for row_index, row in enumerate(control_group.get("rows", []), start=1):
             parent_keys.append(f"rows[{row_index - 1}]")
@@ -66,16 +75,16 @@ def validate(config):
                 try:
                     name = column["name"]
                 except KeyError:
-                    raise ValueError(f"Missing 'name' field at {'.'.join(parent_keys)}")
+                    raise InvalidFileException(f"Missing 'name' field at {'.'.join(parent_keys)}")
                 
                 if name in unique_names:
-                    raise ValueError(f"Duplicate control name found: {name} at {'.'.join(parent_keys)}")
+                    raise InvalidFileException(f"Duplicate control name found: {name} at {'.'.join(parent_keys)}")
                 else:
                     unique_names.add(name)
                 
                 control_type = column.get("type", "")
                 if control_type not in control_types:
-                    raise ValueError(f"Invalid control type: {control_type} at {'.'.join(parent_keys)}")
+                    raise InvalidFileException(f"Invalid control type: {control_type} at {'.'.join(parent_keys)}")
                 else:
                     prefix = control_types[control_type]
 
@@ -97,6 +106,30 @@ def validate(config):
     
     # Additional schema validation can be implemented here
     return True  # Configuration is valid
+
+def validate_devices(config):
+    """Verifies the "devices" within the configuration[I2C devices] object.
+
+    Returns:
+        boolean: True if valid, False otherwise.
+    """
+    parent_keys = []
+    # Checking for pin value exceeding maxpins specification
+    # and duplicate pins within a device connections specification.
+    for device_index, device in enumerate(config["I2C Config"]["devices"]):
+        parent_keys.append(f"I2C Config.devices[{device_index}]")
+        maxpins = device["maxpins"]
+        pins = {}
+        for pin_index, pin in enumerate(device["config"]["pins"]):
+            parent_keys.append(f"config.pins[{pin_index}]")
+            pin_number = str(pin["pin"])
+            if pin_number in pins:
+                raise InvalidFileException(f"Duplicate pin: {".".join(parent_keys)} cid = {pin["cid"]} pin = {pin["pin"]}")
+            pins[pin_number] = 1
+            if pin["pin"] > maxpins-1:
+                raise InvalidFileException(f"Pin number exceeded max: {".".join(parent_keys)} cid = {pin["cid"]} pin = {pin["pin"]} > {maxpins-1}")
+            parent_keys.pop()  # Remove "device[index]" from parent keys
+        parent_keys.pop()  # Remove "device[index]" from parent keys
 
 def report(config):
     """
