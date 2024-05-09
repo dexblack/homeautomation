@@ -1,14 +1,17 @@
 # test.py
 
+from plistlib import InvalidFileException
 import unittest
 from configure import Configure
 from build import Build
 
-class TestConfigureFunctions(unittest.TestCase):
+class TestConfigure(unittest.TestCase):
 
     def setUp(self):
         # Some constants
         self.test_json = 'test/data/home.config.json'
+        self.test_json_max_pins = "test/data/home.config.max-pins.json"
+        self.test_json_duped_pins = "test/data/home.config.duped-pins.json"
 
     def test_ctor(self):
         # Test loading configuration from a file
@@ -48,5 +51,15 @@ class TestConfigureFunctions(unittest.TestCase):
         self.assertTrue(isinstance(script[1]["steps"][5]["respond"], str))
         self.assertEqual(script[1]["steps"][5]["respond"], 'if Main Section LED==2 then set LED Strip 2 = 1')
 
+    def test_invalid_max_pins(self):
+        # Verify the build output
+        config = Configure(self.test_json_max_pins)
+        self.assertRaises(InvalidFileException, config.is_valid)
+
+    def test_invalid_duped_pins(self):
+        # Verify the build output
+        config = Configure(self.test_json_duped_pins)
+        self.assertRaises(InvalidFileException, config.is_valid)
+        
 if __name__ == '__main__':
     unittest.main()
