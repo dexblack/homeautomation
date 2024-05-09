@@ -1,182 +1,81 @@
-import json
-import jsonschema
 import logging
+import json
+from plistlib import InvalidFileException
+import jsonschema
 
-def load(file_path):
-    """
-    Load configuration from a JSON file.
-    """
-    with open(file_path, 'r') as f:
-        config = json.load(f)
-    return config
 
-def validate_schema(data, schema_file):
-        # Validate JSON data against schema
-    try:
-        # Load JSON schema from file
-        with open(schema_file, 'r') as f:
-            schema = json.load(f)
-            jsonschema.validate(data, schema)
+class Configure:
+    def __init__(self, config_file):
+        """
+        Load JSON configuration file.
+        """
+        self.data = {}
+        try:
+            with open(config_file, "r") as f:
+                self.data = json.load(f)
+        except FileNotFoundError as e:
+            logging.error(f"Configuration file '{config_file}' not found: {e}.")
+            raise
+        except json.decoder.JSONDecodeError as e:
+            logging.error(f"Error decoding JSON in '{config_file}': {e}")
+            raise
 
-        logging.info("Validation successful: JSON file is valid according to the schema.")
-        return True
-    
-    except jsonschema.exceptions.ValidationError as e:
-        logging.error("Validation failed:", e)
-        return False
+    def schema_is_valid(self, schema_file):
+        """
+        Validate loaded configuration against a JSON schema.
+        """
+        if not self.data:
+            logging.error("No configuration data loaded.")
+            return False
 
-def validate_json(json_file, schema_file):
-    """
-    Validate a JSON file against a JSON schema.
+        try:
+            with open(schema_file, "r") as f:
+                schema = json.load(f)
+            jsonschema.validate(self.data, schema)
+            return True
+        except FileNotFoundError:
+            logging.error(f"Schema file '{schema_file}' not found.")
+            return False
+        except jsonschema.exceptions.ValidationError as e:
+            logging.error(f"Schema validation failed: {e}")
+            return False
+        
+    def is_valid(self):
+        """
+        Validate the loaded configuration.
+        Assumes the schema has been checked already, so no extra checking for missing properties.
+        """
+        parent_keys = []
+        # Checking for pin value exceeding maxpins specification
+        # and duplicate pins within a device connections specification.
+        for device_index, device in enumerate(self.data["I2C Config"]["devices"]):
+            parent_keys.append(f"I2C Config.devices[{device_index}]")
+            maxpins = device["maxpins"]
+            pins = {}
+            for pin_index, pin in enumerate(device["config"]["pins"]):
+                parent_keys.append(f"config.pins[{pin_index}]")
+                pin_number = str(pin["pin"])
+                if pin_number in pins:
+                    raise InvalidFileException(f"Duplicate pin: {".".join(parent_keys)} cid = {pin["cid"]} pin = {pin["pin"]}")
+                pins[pin_number] = 1
+                if pin["pin"] > maxpins-1:
+                    raise InvalidFileException(f"Pin number exceeded max: {".".join(parent_keys)} cid = {pin["cid"]} pin = {pin["pin"]} > {maxpins-1}")
+                parent_keys.pop()  # Remove "device[index]" from parent keys
+            parent_keys.pop()  # Remove "device[index]" from parent keys
 
-    Args:
-        json_file (str): Path to the JSON file to validate.
-        schema_file (str): Path to the JSON schema file.
 
-    Returns:
-        bool: True if the JSON file is valid according to the schema, False otherwise.
-    """
-    # Load JSON data from file
-    with open(json_file, 'r') as f:
-        json_data = json.load(f)
+    def report(config):
+        """
+        Print the configuration report.
+        """
+        for key, value in config.items():
+            if key not in [
+                "microcontroller",
+                "control types",
+                "NeoPixels",
+                "IC2 Config",
+            ]:  # Exclude for brevity
+                logging.info(f"{key}: ", value)
 
-    return validate_schema(json_data, schema_file)
-
-def validate(config):
-    """
-    Validate the configuration format.
-    """
-    parent_keys = []
-
-    # Validation rules implementation
-    unique_names = set()
-    control_names = set()
-    control_types = config.get("control types", {})
-    controls = config.get("controls", [])
-    
-    # Validate control names uniqueness and generate control names list
-    for control_group_index, control_group in enumerate(controls, start=1):
-        parent_keys.append(f"controls[{control_group_index - 1}]")
-
-        for row_index, row in enumerate(control_group.get("rows", []), start=1):
-            parent_keys.append(f"rows[{row_index - 1}]")
-            
-            for column_index, column in enumerate(row, start=1):
-                parent_keys.append(f"control[{column_index - 1}]")
-                try:
-                    name = column["name"]
-                except KeyError:
-                    raise ValueError(f"Missing 'name' field at {'.'.join(parent_keys)}")
-                
-                if name in unique_names:
-                    raise ValueError(f"Duplicate control name found: {name} at {'.'.join(parent_keys)}")
-                else:
-                    unique_names.add(name)
-                
-                control_type = column.get("type", "")
-                if control_type not in control_types:
-                    raise ValueError(f"Invalid control type: {control_type} at {'.'.join(parent_keys)}")
-                else:
-                    prefix = control_types[control_type]
-
-                    if control_type != "null":
-                        group_start_row = control_group.get("row", 0)
-                        if group_start_row == 0:
-                            raise ValueError(f"Missing 'row' field at {'.'.join(parent_keys)}")
-                        
-                        control_name = f"{prefix}{group_start_row + row_index}_{column_index}"
-                        logging.trace(f"Control: {control_name} at {'.'.join(parent_keys)}")
-
-                        if control_name in control_names:
-                            raise ValueError(f"Duplicate control name found: {control_name} at {'.'.join(parent_keys)}")
-                        else:
-                            control_names.add(control_name)
-                parent_keys.pop()  # Remove "control[index]" from parent keys
-            parent_keys.pop()  # Remove "rows[index]" from parent keys
-        parent_keys.pop()  # Remove "controls[index]" from parent keys
-    
-    # Additional schema validation can be implemented here
-    return True  # Configuration is valid
-
-def report(config):
-    """
-    Print the configuration report.
-    """
-    for key, value in config.items():
-        if key not in ["microcontroller", "control types", "NeoPixels", "IC2 Config"]:  # Exclude for brevity
-            logging.info(f"{key}: ", value)
-
-def build(data, human_readable=False):
-    new_script = []
-    control_by_name = {}
-    control_pins_by_cid = {}
-
-    # Organize controls by cid
-    for control_group in data["controls"]:
-        row_start = control_group["row"] - 1  # Adjust for 0-based indexing
-        for row_index, row in enumerate(control_group["rows"], start=row_start):
-            for column_index, input_control in enumerate(row, start=1):
-                control_type_prefix = data["control types"][input_control["type"]]
-                cid = f"{control_type_prefix}{row_index + 1}_{column_index}"
-                control_by_name[input_control["name"]] = {
-                    "cid": cid, "type": input_control["type"]
-                }
-
-    for device in data["I2C Config"]["devices"]:
-        for pin_index, pin in enumerate(device["config"]["pins"], start=0):
-            if pin["cid"] in control_pins_by_cid:
-                control_pins_by_cid[pin["cid"]]["pins"].append(pin_index)
-            else:
-                control_pins_by_cid[pin["cid"]] = {
-                    "address": device["address"],
-                    "pins": [ pin_index ]
-                }
-
-    def valid_pins_value(pins, value):
-        # Verify sufficient pins to hold integer value
-        return value < 2 ** len(pins)
-
-    # Iterate through actions
-    for action in data["actions"]:
-        script = []
-        for description in action.keys():
-            for io_event in action[description]:
-                for control_name in io_event.keys():
-                    input_control = control_by_name[control_name]
-                    if input_control["cid"] not in control_pins_by_cid:
-                        logging.debug(f"{input_control["cid"]} not configured on any controller.")
-                        continue
-
-                    input_cfg = control_pins_by_cid[input_control["cid"]]
-                    output_control_name = next(k for k in io_event[control_name].keys() if k != "value")
-                    output_control = control_by_name[output_control_name]
-                    output_cfg = control_pins_by_cid[output_control["cid"]]
-
-                    assert(valid_pins_value(input_cfg["pins"], io_event[control_name]["value"]))
-                    assert(valid_pins_value(output_cfg["pins"], io_event[control_name][output_control_name]))
-
-                    describe = {
-                        "respond": f"if {control_name}=={io_event[control_name]["value"]} then set {output_control_name} = {io_event[control_name][output_control_name]}"
-                    }
-
-                    script_step = {
-                        "in_address": input_cfg["address"],
-                        "in_pins": input_cfg["pins"],
-                        "in_value": io_event[control_name]["value"],
-                        "out_address": output_cfg["address"],
-                        "out_pins": output_cfg["pins"],
-                        "out_value": io_event[control_name][output_control_name]
-                    }
-
-                    script.append(describe if human_readable else script_step)
-
-        new_script.append({"reactions": script})
-
-    return {"script": new_script}
-
-def generate(config):
-    """
-    Generate code to execute a polling script.
-    """
-    # Someday we may need to allow code to be inserted into the script steps.
-    pass
+    def __call__(self):
+        return self.data
