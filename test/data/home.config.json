@@ -1,7 +1,7 @@
 {
     "microcontroller": "ESP32-S3",
     "control types": {
-        "null": "",
+        "null": "_",
         "button": "B",
         "toggle": "T",
         "rotary": "S",

@@ -63,19 +63,18 @@ class Configure:
                 parent_keys.pop()  # Remove "device[index]" from parent keys
             parent_keys.pop()  # Remove "device[index]" from parent keys
 
-
-    def report(config):
+    def report(self):
         """
         Print the configuration report.
         """
-        for key, value in config.items():
+        for key, value in self.data.items():
             if key not in [
                 "microcontroller",
                 "control types",
                 "NeoPixels",
                 "IC2 Config",
             ]:  # Exclude for brevity
-                logging.info(f"{key}: ", value)
+                logging.debug(f"{key}: ", value)
 
     def __call__(self):
         return self.data

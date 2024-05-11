@@ -3,6 +3,7 @@
 import os
 from configure import Configure
 from build import Build
+import generate
 import logging
 
 def main():
@@ -22,9 +23,11 @@ def main():
     except ValueError as e:
         logging.debug(f"Configuration validation failed: {e}")
 
-    configuration = configure()
-    logging.info()
-    actions = Build(configuration).build()
+    ui = generate.ui(configure())
+    logging.info(ui)
+    return
+
+    actions = Build(configure()).build()
     schema_file_path = os.path.join(script_dir, 'test', 'data', 'script.schema.json')
     assert(configure.validate_schema(actions, schema_file_path))
 
